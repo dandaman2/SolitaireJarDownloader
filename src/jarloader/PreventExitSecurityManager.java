@@ -1,4 +1,4 @@
-package sample;
+package jarloader;
 
 import java.security.Permission;
 

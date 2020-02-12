@@ -1,4 +1,4 @@
-package sample;
+package jarloader;
 /* From http://java.sun.com/docs/books/tutorial/index.html */
 /*
  * Copyright (c) 2006 Sun Microsystems, Inc. All Rights Reserved.

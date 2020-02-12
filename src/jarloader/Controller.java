@@ -1,4 +1,4 @@
-package sample;
+package jarloader;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,7 +11,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -99,7 +98,9 @@ public class Controller implements Initializable {
             try {
                 System.setSecurityManager(new PreventExitSecurityManager());
                 JarRunner j = new JarRunner(jarListView.getSelectionModel().getSelectedItem().getDownloadUrl());
-            }catch(SecurityException s){}
+            }catch(SecurityException s){
+                s.printStackTrace();
+            }
         }
     }
 
@@ -107,7 +108,8 @@ public class Controller implements Initializable {
         link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                String text = jarLinkLbl.getText();
+                String text = link.getText();
+                link.setVisited(false);
                 Desktop d = Desktop.getDesktop();
                 try {
                     d.browse(new URI(text));

@@ -1,4 +1,4 @@
-package sample;
+package jarloader;
 
 public class JarData {
     private String name;
