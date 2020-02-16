@@ -7,3 +7,5 @@ in partnership with Professor George T. Heineman (heineman@wpi.edu).
 Designed to pull JAR files from Github repository: <a>https://github.com/dandaman2/Solitaire_Jars</a>.
 
 All Solitaire variation JAR files were generated using an abstracted Scala-Java CLS framework at <a>https://github.com/combinators</a>
+
+A JAR file exists in the main directory of this project. A version of the launcher can be run directly from that JAR file. 
