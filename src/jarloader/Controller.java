@@ -2,6 +2,8 @@ package jarloader;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,6 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -41,7 +46,12 @@ public class Controller implements Initializable {
     Button redownloadBtn;
     @FXML
     Button runBtn;
+    @FXML
+    Hyperlink combinatorLink;
+    @FXML
+    TextField searchBar;
 
+    private ObservableList<JarData> jarData;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,17 +59,20 @@ public class Controller implements Initializable {
         grid.setGridLinesVisible(true);
         setLinkListener(jarLinkLbl);
         setLinkListener(jarDownloadLbl);
+        setLinkListener(combinatorLink);
+        setSearchBar(searchBar, jarListView);
         setListListener();
         rePull();
     }
 
     public void rePull(){
         //clear current listview and labels
+        searchBar.setText("");
         jarListView.getItems().clear();
         jarNameLbl.setText("");
         jarLinkLbl.setText("");
         jarDownloadLbl.setText("");
-        ArrayList<JarData> jarData = new ArrayList<>();
+        jarData = FXCollections.observableArrayList();
         try {
             URL url = new URL("https://api.github.com/repos/dandaman2/Solitaire_Jars/contents");
 
@@ -94,10 +107,10 @@ public class Controller implements Initializable {
     }
 
     public void startJar(){
-        if(jarListView.getSelectionModel().getSelectedItem() != null){
+        if(!jarDownloadLbl.getText().equals("") || jarDownloadLbl.getText() != null){
             try {
                 System.setSecurityManager(new PreventExitSecurityManager());
-                JarRunner j = new JarRunner(jarListView.getSelectionModel().getSelectedItem().getDownloadUrl());
+                JarRunner j = new JarRunner(jarDownloadLbl.getText());
             }catch(SecurityException s){
                 s.printStackTrace();
             }
@@ -108,7 +121,12 @@ public class Controller implements Initializable {
         link.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                String text = link.getText();
+                String text;
+                if(link.getText().equals("Combinators.org")){
+                    text = "https://github.com/combinators";
+                }else{
+                    text = link.getText();
+                }
                 link.setVisited(false);
                 Desktop d = Desktop.getDesktop();
                 try {
@@ -127,18 +145,60 @@ public class Controller implements Initializable {
         jarListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<JarData>() {
             @Override
             public void changed(ObservableValue<? extends JarData> observable, JarData oldValue, JarData newValue) {
-                // update labels
-                jarNameLbl.setDisable(false);
-                jarNameLbl.setText(newValue.getName());
-                jarLinkLbl.setDisable(false);
-                jarLinkLbl.setText(newValue.getLocationUrl());
-                jarDownloadLbl.setDisable(false);
-                jarDownloadLbl.setText(newValue.getDownloadUrl());
+                try {
+                    // update labels
+                    jarNameLbl.setDisable(false);
+                    jarNameLbl.setText(newValue.getName());
+                    jarLinkLbl.setDisable(false);
+                    jarLinkLbl.setText(newValue.getLocationUrl());
+                    jarDownloadLbl.setDisable(false);
+                    jarDownloadLbl.setText(newValue.getDownloadUrl());
+                }catch(NullPointerException npe){
+                    //Recallibrate for searching
+                }
 
 
             }
         });
     }
 
+    private void setSearchBar(TextField searchbar, ListView<JarData> listView) {
+        searchbar.textProperty().addListener(new ChangeListener() {
+            public void changed(ObservableValue observable, Object oldVal,
+                                Object newVal) {
+                search(listView, (String) oldVal, (String) newVal);
+            }
+        });
+    }
 
+
+    public void search(ListView<JarData> list, String oldVal, String newVal) {
+        if (oldVal != null && (newVal.length() < oldVal.length())) {
+            list.setItems(jarData);
+        }
+        String value = newVal.toLowerCase();
+        ObservableList<JarData> subentries = FXCollections.observableArrayList();
+        for (JarData entry : list.getItems()) {
+            String entryText = entry.getName().toLowerCase();
+            if (entryText.contains(value) || findEditDistance(value, entryText)<3) {
+                subentries.add(entry);
+            }
+        }
+        list.setItems(subentries);
+    }
+
+    //Finds the edit distance between two strings
+    private int findEditDistance(String searchedValue, String listEntryName){
+        String regexString = "(?<=\\G.{";
+        regexString += searchedValue.length() + "})";
+        int min = -1;
+        for(String chunk : listEntryName.split(regexString)){
+            int newVal = Math.abs(EditDist.editDist(searchedValue, chunk,
+                    searchedValue.length(), chunk.length()));
+            if(min < 0 || newVal < min){
+                min = newVal;
+            }
+        }
+        return min;
+    }
 }

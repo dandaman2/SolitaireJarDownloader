@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("loader.fxml"));
-        primaryStage.setTitle("Jar Downloader");
+        primaryStage.setTitle("Combinators.org Solitaire Jar Downloader");
         primaryStage.setScene(new Scene(root, 800, 400));
         primaryStage.setResizable(false);
         primaryStage.show();

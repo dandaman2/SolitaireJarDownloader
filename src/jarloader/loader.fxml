@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -12,7 +13,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jarloader.Controller">
    <children>
-      <GridPane alignment="center" hgap="10" vgap="10">
+      <GridPane alignment="center" hgap="10" vgap="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
             <ColumnConstraints />
          </columnConstraints>
@@ -28,26 +29,27 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints maxHeight="491.6000122070312" minHeight="10.0" prefHeight="343.60003662109375" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="491.6000122070312" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="491.6000122070312" minHeight="10.0" prefHeight="286.8" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="295.6000122070312" minHeight="10.0" prefHeight="56.79996337890623" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button fx:id="redownloadBtn" mnemonicParsing="false" onAction="#rePull" prefHeight="71.0" prefWidth="247.0" text="Redownload from Github" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <Button fx:id="redownloadBtn" mnemonicParsing="false" onAction="#rePull" prefHeight="71.0" prefWidth="247.0" text="Redownload from Github" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <Button fx:id="runBtn" mnemonicParsing="false" onAction="#startJar" prefHeight="71.0" prefWidth="247.0" text="Run Selected JAR" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                        <Button fx:id="runBtn" mnemonicParsing="false" onAction="#startJar" prefHeight="71.0" prefWidth="247.0" text="Run Selected JAR" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets bottom="10.0" top="10.0" />
                            </GridPane.margin>
                         </Button>
-                        <ListView fx:id="jarListView" prefHeight="200.0" prefWidth="200.0">
+                        <ListView fx:id="jarListView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </GridPane.margin>
                         </ListView>
-                        <GridPane fx:id="grid" prefHeight="282.0" prefWidth="300.0" GridPane.columnIndex="1">
+                        <GridPane fx:id="grid" prefHeight="224.0" prefWidth="360.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -69,6 +71,56 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                            </GridPane.margin>
                         </GridPane>
+                        <GridPane gridLinesVisible="true" prefHeight="104.0" prefWidth="360.0" GridPane.columnIndex="1">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Hyperlink fx:id="combinatorLink" text="Combinators.org" textAlignment="CENTER" GridPane.halignment="CENTER">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <GridPane.margin>
+                                    <Insets />
+                                 </GridPane.margin></Hyperlink>
+                              <GridPane GridPane.columnIndex="1">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label style="-fx-text-fill: white;" text="Made By:" underline="true" GridPane.halignment="CENTER">
+                                       <padding>
+                                          <Insets bottom="5.0" />
+                                       </padding></Label>
+                                    <Label style="-fx-text-fill: white;" text="Daniel Duff" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                    <Label style="-fx-text-fill: white;" text="Andrew Levy" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                                 </children>
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                              </GridPane>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <GridPane.margin>
+                              <Insets left="20.0" right="20.0" top="10.0" />
+                           </GridPane.margin>
+                        </GridPane>
+                        <TextField fx:id="searchBar" alignment="CENTER" promptText="Search JAR">
+                           <GridPane.margin>
+                              <Insets left="20.0" right="20.0" top="20.0" />
+                           </GridPane.margin>
+                        </TextField>
                      </children>
                   </GridPane>
                </children>
